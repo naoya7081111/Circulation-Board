@@ -160,7 +160,7 @@ app.post('/api/signup',
                         }
                     )
             }
-        )    
+        )  
         })
     },
 );
@@ -804,7 +804,8 @@ app.post('/api/complete/never',
     }
 )
 
-
+// expressとreactについて
+// https://reffect.co.jp/react/front-react-back-node#i
 
 // jwtについて真似した
 // https://qiita.com/sa9ra4ma/items/67edf18067eb64a0bf40

@@ -55,7 +55,6 @@ const option = {
 }
 
 // ユーザー認証に関するAPI
-
 app.post('/api/login', (req, res) => {
     const email = req.body.email;
     connection.query(

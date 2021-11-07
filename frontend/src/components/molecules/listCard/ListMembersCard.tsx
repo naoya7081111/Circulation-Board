@@ -25,7 +25,7 @@ export const ListMembersCard: VFC<Props> = memo((props) => {
     return (
         <>
             <Flex w="280px" mb={4} alignItems="center" borderRadius={10} bg="orange.50" _hover={{ cursor: "pointer", bg: "orange.100"}} onClick={() => onClickMemberModal(id)} > 
-                <Image borderRadius="full" color={isHost ? 'pink.400' : 'gray.600'} border='2px' boxSize="42px" src={image === null ? `${process.env.PUBLIC_URL}/img/freemeison.jpeg` : `${process.env.PUBLIC_URL}/uploads/${image}`} />
+                <Image borderRadius="full" color={isHost ? 'pink.400' : 'gray.600'} border='2px' boxSize="42px" src={image === null ? `${process.env.PUBLIC_URL}/img/freemeison.jpeg` : `https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/test/${image}`} />
                 <Text fontSize="sm" fontWeight="bold" pl={4} whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' >
                     {children}
                 </Text>

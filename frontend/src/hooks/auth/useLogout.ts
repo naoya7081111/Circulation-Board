@@ -24,7 +24,7 @@ export const useLogout = () => {
         }).catch((error) => {
             showMessage({ title: "ログアウトに失敗しました",  status: "error"});
         })        
-    }, [setLoginUser, showMessage, setLoginCommunity, history]);
+    }, [setLoginUser, showMessage, setLoginCommunity, setCommunityLists, history]);
 
     return { logout };
 };

@@ -26,7 +26,7 @@ export const MemberInfoModal: VFC<Props> = memo((props) => {
                     <ModalCloseButton />
                     <ModalBody>
                         <Stack spacing={4} >
-                            <Image borderRadius="full" boxSize="42px" src={selectUSer?.userImageName === null ? `${process.env.PUBLIC_URL}/img/freemeison.jpeg` : `${process.env.PUBLIC_URL}/uploads/${selectUSer?.userImageName}`} />
+                            <Image borderRadius="full" boxSize="42px" src={selectUSer?.userImageName === null ? `${process.env.PUBLIC_URL}/img/freemeison.jpeg` : `https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/test/${selectUSer?.userImageName}`} />
                             <Text fontSize="md" fontWeight="bold" >
                                 {selectUSer?.userName}
                             </Text>

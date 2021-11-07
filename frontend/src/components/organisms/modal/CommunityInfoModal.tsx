@@ -81,7 +81,7 @@ export const CommunityInfoModal: VFC<Props> = memo((props) => {
                             {isSetting === false ? (
                                 <>
                                 <HStack>
-                                <Image borderRadius="full" boxSize="42px" src={imageName === null ? `${process.env.PUBLIC_URL}/img/freemeisoncommunity.png` : `${process.env.PUBLIC_URL}/uploads/${imageName}`} />
+                                <Image borderRadius="full" boxSize="42px" src={imageName === null ? `${process.env.PUBLIC_URL}/img/freemeisoncommunity.png` : `https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/test/${imageName}`} />
                                 <Spacer />
                                 {hostCheck() && (
                                     <>

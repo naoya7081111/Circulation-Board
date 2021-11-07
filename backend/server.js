@@ -17,15 +17,58 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/uploads')
+        cb(null, 'public/temporary')
     },
     filename: (req, file, cb) => {
         const { originalname } = file;
-        cb(null, `${uuid()}-${originalname}`);
+        const fileName = encodeURI(`${uuid()}-${originalname}`);
+        cb(null, fileName);
     }
 })
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage }).single('file');
+const uploadAsync = (req, res) => {
+    return new Promise((resolve, reject) => {
+        upload(req,res,function(err){
+            if (err instanceof multer.MulterError) {
+                // A Multer error occurred when uploading.
+                reject(err);
+              } else if (err) {
+                // An unknown error occurred when uploading.
+                reject(err);
+              }
+            else {resolve()}
+        });
+    })
+}
+
+// ここからtoken取得のためのコード
+const _ = require('lodash');
+const httpRequest = require('request');
+const { resolve } = require('path/posix');
+
+const tenantId = '819897bd08504d38bcce5fc9b4d08a6f';
+const username = 'gncu77400403';
+const password = '6846Eleven11';
+
+const api_url = 'https://identity.tyo2.conoha.io/v2.0';
+
+const params = {
+    "url": api_url+'/tokens',
+    "headers": {
+        "Accept": 'application/json'
+    },
+    "form": JSON.stringify({
+        "auth": {
+            "passwordCredentials": {
+                "username": username,
+                "password": password
+            },
+            "tenantId": tenantId
+        }
+    })
+
+};
 
 // req.bodyを使うためのおまじない
 app.use(express.urlencoded({encoded: false}));
@@ -197,7 +240,7 @@ app.use((req, res, next) => {
     })
 });
 
-app.post('/api/update/user', upload.single('file'), 
+app.post('/api/update/user', upload, 
     (req, res, next) => {
         const userName = req.body.name;
         const email = req.body.email;
@@ -243,27 +286,84 @@ app.post('/api/update/user', upload.single('file'),
     }
 )
 
-app.post('/api/update/userimage', upload.single('file'),
+app.post('/api/update/userimage',
     (req, res, next) => {
-        const imageName = req.file.filename;
-        connection.query(
-            'SELECT imagename FROM users WHERE users.id = ?',
-            [req.userId],
-            (error, results) => {
-                const preImageName = results[0].imagename;
-                if (preImageName){
-                    fs.unlink(`public/uploads/${preImageName}`, (err) => {
-                        if (err) throw err;
-                    })    
+        uploadAsync(req, res).then(() => {
+            const file = req.file;
+            // console.log(file);
+            const imageName = file.filename;   
+
+            // オブジェクトストレージへアップロード
+            // tokenの取得
+            httpRequest.post(params, function(err, result, body){
+                if (_.isString(body)) {
+                    const res = JSON.parse(body);
+                    const token = res.access.token.id;
+                    const token_expire = res.access.token.expires;
+                    // console.log('token: ' + token);
+                    // console.log('expire: ' + token_expire);
+
+                    const headers = {
+                        'X-Auth-Token': token,
+                        "Transfer-Encoding":"chunked"
+                    };
+
+                    // アップロード
+                    const options = {
+                        url: `https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/test/${imageName}`,
+                        headers: headers,
+                    }
+
+                    fs.createReadStream(`public/temporary/${imageName}`)
+                    .pipe(httpRequest.put( options , function(err , response , body){
+                    // console.log( response.headers );
+                    // console.log( 'ステータスコード:',response.statusCode);
+                    // console.log( body );
+                    if(err)console.log(err);
+                    else {
+                        // console.log( 'アップロードしました' );
+
+                        // 前の画像の消去
+                        connection.query(
+                            'SELECT imagename FROM users WHERE users.id = ?',
+                            [req.userId],
+                            (error, results) => {
+                                const preImageName = results[0].imagename;
+                                if (preImageName) {
+                                    const deleteOptions = {
+                                        url: `https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/test/${preImageName}`,
+                                        method: 'DELETE',
+                                        headers: headers
+                                    }
+                                    httpRequest(deleteOptions, function (error, response, body) {
+                                        // console.log(`削除${body}`);
+                                    })
+                                }
+                                fs.unlink(`public/temporary/${imageName}`, (err) => {
+                                    if (err) throw err;
+                                })
+                                // 画像変更の処理
+                                connection.query(
+                                    'UPDATE users SET imagename = ? WHERE users.id = ?',
+                                    [imageName, req.userId],
+                                    (error, results) => {
+                                        next()
+                                    }
+                                )
+                            }
+                        )
+                    }
+                    }));        
+
+                } else {
+                    const res = body;
+                    console.log(res);
                 }
-                // 画像変更の処理
-                connection.query(
-                    'UPDATE users SET imagename = ? WHERE users.id = ?',
-                    [imageName, req.userId],
-                    (error, results) => next()
-                )        
-            }
-        )
+            })
+
+        }).catch((err) => {
+            console,log(err);
+        });
     },
     (req, res) => {
         connection.query(
@@ -581,7 +681,7 @@ app.use((req, res, next) => {
     })
 })
 
-app.post('/api/update/community', upload.single('file'), 
+app.post('/api/update/community', upload, 
     (req, res, next) => {
         const communityName = req.body.name;
         if(communityName === ''){
@@ -616,29 +716,76 @@ app.post('/api/update/community', upload.single('file'),
     }
 )
 
-app.post('/api/update/communityimage', upload.single('file'),
+app.post('/api/update/communityimage',
     (req, res, next) => {
-        const imageName = req.file.filename;
-        connection.query(
-            'SELECT imagename FROM communities WHERE communities.id = ?',
-            [req.communityId],
-            (error, results) => {
-                const preImageName = results[0].imagename;
-                if (preImageName) {
-                    fs.unlink(`public/uploads/${preImageName}`, (err) => {
-                        if (err) throw err;
-                    })
-                }
-                // 画像変更の処理
-                connection.query(
-                    'UPDATE communities SET imagename = ? WHERE communities.id = ?',
-                    [imageName, req.communityId],
-                    (error, results) => {
-                        next()
+        uploadAsync(req, res).then(() => {
+            const file = req.file;
+            const imageName = file.filename;    
+
+            // オブジェクトストレージへアップロード
+            // tokenの取得
+            httpRequest.post(params, function(err, result, body){
+                if(_.isString(body)){
+                    const res = JSON.parse(body);
+                    const token = res.access.token.id;
+                    // const token_expire = res.access.token.expires;
+
+                    const headers = {
+                        'X-Auth-Token': token,
+                        "Transfer-Encoding":"chunked"
+                    };
+
+                    // アップロード
+                    const options = {
+                        url: `https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/test/${imageName}`,
+                        headers: headers,
                     }
-                )
-            }
-        )
+
+                    fs.createReadStream(`public/temporary/${imageName}`)
+                    .pipe(httpRequest.put( options , function(err , response , body){
+                    if(err)console.log(err);
+                    else {
+                        // 前の画像の消去
+                        connection.query(
+                            'SELECT imagename FROM communities WHERE communities.id = ?',
+                            [req.communityId],
+                            (error, results) => {
+                                const preImageName = results[0].imagename;
+                                if (preImageName) {
+                                    const deleteOptions = {
+                                        url: `https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/test/${preImageName}`,
+                                        method: 'DELETE',
+                                        headers: headers
+                                    }
+                                    httpRequest(deleteOptions, function (error, response, body) {
+                                        // console.log(`削除${body}`);
+                                    })
+                                }
+                                fs.unlink(`public/temporary/${imageName}`, (err) => {
+                                    if (err) throw err;
+                                })
+                                // 画像変更の処理
+                                connection.query(
+                                    'UPDATE communities SET imagename = ? WHERE communities.id = ?',
+                                    [imageName, req.communityId],
+                                    (error, results) => {
+                                        next()
+                                    }
+                                )
+                            }
+                        )
+
+                    }
+                    }));        
+                } else{
+                    const res = body;
+                    console.log(res);
+                }
+            });    
+
+        }).catch((err) => {
+            console.log(err);
+        })        
     },
     (req, res) => {
         connection.query(

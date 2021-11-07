@@ -78,7 +78,7 @@ export const EntryContent: VFC = memo(() => {
                     {resultCommunity !== null ? (
                         <>
                             <Flex h="72px" p={2} alignItems="center" borderRadius={10}  > 
-                                <Image borderRadius="lg" boxSize="48px" src={resultCommunity.communityImageName === null ? `${process.env.PUBLIC_URL}/img/freemeisoncommunity.png` : `${process.env.PUBLIC_URL}/uploads/${resultCommunity.communityImageName}`} />
+                                <Image borderRadius="lg" boxSize="48px" src={resultCommunity.communityImageName === null ? `${process.env.PUBLIC_URL}/img/freemeisoncommunity.png` : `https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/test/${resultCommunity.communityImageName}`} />
                                 <Text fontSize="md" fontWeight="bold" pl={4} >
                                     {resultCommunity?.communityName}
                                 </Text>

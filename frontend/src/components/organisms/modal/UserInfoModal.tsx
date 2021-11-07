@@ -84,7 +84,7 @@ export const UserInfoModal: VFC<Props> = memo((props) => {
                             {isSetting === false ? (
                                 <>
                                 <HStack>
-                                <Image borderRadius="full" boxSize="42px" src={imageName === null ? `${process.env.PUBLIC_URL}/img/freemeison.jpeg` : `${process.env.PUBLIC_URL}/uploads/${imageName}`} />
+                                <Image borderRadius="full" boxSize="42px" src={imageName === null ? `${process.env.PUBLIC_URL}/img/freemeison.jpeg` : `https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/test/${imageName}`} />
                                 <Spacer />
                                 <SettingButton onClick={onClickSetting} >変更</SettingButton>
                                 </HStack>

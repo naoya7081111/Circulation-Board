@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Flex, Spacer, Text, useDisclosure } from "@chakra-ui/react";
 import { memo, useCallback, useEffect, useState, VFC } from "react"
+import { Flex, Spacer, Text, useDisclosure, AspectRatio, Image } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import Iframe from 'react-iframe';
 import { useNewsLists } from "../../hooks/context/useNewsLists";
@@ -66,7 +66,10 @@ export const View: VFC = memo(() => {
                                 {selectNews?.newsContent}
                             </Text>
                             {/* ファイルの挿入 */}
-                            <Iframe url={`${process.env.PUBLIC_URL}/test/test.JPG`} width="100%" height="100%" position='relative' display='block' id='newsfile' allowFullScreen styles={{marginLeft: '56px'}}/>
+                            <AspectRatio ratio={ 1 } ml={'56px'} mt={{base: 3, md: 6}}>
+                                {/* <Iframe url={`${process.env.PUBLIC_URL}/test/職務経歴書.pdf`} display='block' id='newsfile' allowFullScreen/> */}
+                                <Image src={`https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/newsfile/test.jpeg`} h='100%'/>
+                            </AspectRatio>
                         </Flex>
                         <Spacer />
                         {hostCheck() ? (

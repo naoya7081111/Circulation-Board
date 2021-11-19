@@ -6,7 +6,6 @@ export type NewsSouce = {
     postdate: Date;
     important: boolean;
     content: string;
-    image: File | null;
     username: string;
     imagename: string | null;
     complete: boolean;

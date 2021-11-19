@@ -22,7 +22,6 @@ export const useNewsGet = () => {
                         postDate: news.postdate,
                         isImportant: news.important,
                         newsContent: news.content,
-                        newsImage: news.image,
                         newsUserName: news.username,
                         newsUserImageName: news.imagename,
                         isComplete: news.complete

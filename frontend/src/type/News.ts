@@ -6,8 +6,8 @@ export type News  = {
     postDate: Date;
     isImportant: boolean;
     newsContent: string;
-    newsImage: File | null;
     newsUserName: string;
     newsUserImageName: string | null;
     isComplete: boolean;
+    fileName: Array<string> | null;
 }

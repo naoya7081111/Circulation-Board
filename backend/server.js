@@ -827,7 +827,7 @@ app.get('/api/member', (req, res) => {
 app.get('/api/news/view', 
     (req, res) => {
         connection.query(
-            'SELECT news.id, news.title, news.communityid, news.userid, news.postdate, news.important, news.content, news.image, users.username, users.imagename, complete FROM news, users, complete WHERE news.userid = users.id AND news.id = complete.newsid AND news.communityid = ? AND complete.userid = ? order by news.id desc',
+            'SELECT news.id, news.title, news.communityid, news.userid, news.postdate, news.important, news.content, users.username, users.imagename, complete FROM news, users, complete WHERE news.userid = users.id AND news.id = complete.newsid AND news.communityid = ? AND complete.userid = ? order by news.id desc',
             [req.communityId, req.userId],
             (error, results) => {
                 if (results.length > 0) {
@@ -845,6 +845,12 @@ app.get('/api/news/view',
         )
     }
 )
+
+// 追加
+// app.get('/api/news/file/view',
+//     (req, res) => {
+//     }
+// )
 
 app.post('/api/news/post', 
     (req, res, next) => {

@@ -847,10 +847,21 @@ app.get('/api/news/view',
 )
 
 // 追加
-// app.get('/api/news/file/view',
-//     (req, res) => {
-//     }
-// )
+app.post('/api/news/file/view',
+    (req, res) => {
+        const newsId = req.body.id;
+        connection.query(
+            'SELECT filename FROM newsfile where newsid = ?',
+            [newsId],
+            (error, results) => {
+                res.json({
+                    message: true,
+                    newsFileNames: results
+                })
+            }
+        )
+    }
+)
 
 app.post('/api/news/post', 
     (req, res, next) => {

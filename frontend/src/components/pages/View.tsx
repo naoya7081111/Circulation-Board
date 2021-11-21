@@ -14,6 +14,7 @@ import { LoginButton } from "../atoms/button/LoginButton";
 import { ListMembersCard } from "../molecules/listCard/ListMembersCard";
 import { ViewMainContainer } from "../organisms/layout/news/ViewMainContainer";
 import { NeverModal } from "../organisms/modal/NeverModal";
+import { useNewsFileNameGet } from "../../hooks/news/useNewsFileNameGet";
 
 export const View: VFC = memo(() => {
 
@@ -24,25 +25,26 @@ export const View: VFC = memo(() => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { hostCheck } = useHostGet();
     const { defaultPage } = useDefaultPage();
+    const { newsFileNameGet, newsFileNames } = useNewsFileNameGet();
 
     const params: {newsId: string} = useParams();
-    const selectNewsId = params.newsId;
+    const selectNewsId = Number(params.newsId);
 
     const [selectNews, setSelectNews] = useState<News | null>(null);
 
     const findAndSet = () => {
-        const findNews: News | undefined = newsLists.find((news) => news.newsId === Number(selectNewsId));
+        const findNews: News | undefined = newsLists.find((news) => news.newsId === selectNewsId);
         setSelectNews(findNews ?? null); 
     }
 
     const onClickNever = useCallback(() => {
-        neverMembersGet({ newsId: Number(selectNewsId) })
+        neverMembersGet({ newsId: selectNewsId })
         onOpen();
     }, [neverMembersGet, selectNewsId])
 
     useEffect(() => {
         defaultPage();
-        completeUp({ newsId: Number(selectNewsId) });
+        completeUp({ newsId: selectNewsId });
     }, [])
 
     // レンダリングされたときfindAndSetが２回呼ばれるのでイケてないコード。他に良い方法があれば書き換える
@@ -50,6 +52,9 @@ export const View: VFC = memo(() => {
         findAndSet();
     }, [newsLists]);
 
+    useEffect(() => {
+        newsFileNameGet({ newsId: selectNewsId });
+    }, [selectNewsId]);
 
     return (
         <>
@@ -66,10 +71,23 @@ export const View: VFC = memo(() => {
                                 {selectNews?.newsContent}
                             </Text>
                             {/* ファイルの挿入 */}
-                            <AspectRatio ratio={ 1 } ml={'56px'} mt={{base: 3, md: 6}}>
-                                {/* <Iframe url={`${process.env.PUBLIC_URL}/test/職務経歴書.pdf`} display='block' id='newsfile' allowFullScreen/> */}
-                                <Image src={`https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/newsfile/test.jpeg`} h='100%'/>
-                            </AspectRatio>
+                            {newsFileNames.length !== 0 && (
+                                <>
+                                    <AspectRatio ratio={ 1 } ml={'56px'} mt={{base: 3, md: 6}}>
+                                        {
+                                            newsFileNames[0].newsFileName.split('.').pop() === 'pdf' ? (
+                                                <>
+                                                    <Iframe url={`${process.env.PUBLIC_URL}/test/職務経歴書.pdf`} display='block' id='newsfile' allowFullScreen/>                                                
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Image src={`https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/newsfile/${newsFileNames[0].newsFileName}`} h='100%'/>                                                
+                                                </>
+                                            )
+                                        }
+                                    </AspectRatio>
+                                </>
+                            )}
                         </Flex>
                         <Spacer />
                         {hostCheck() ? (

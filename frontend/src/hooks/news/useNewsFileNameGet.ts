@@ -1,17 +1,32 @@
 import axios from "axios";
-import { useCallback } from "react";
-import { useNewsLists } from "../context/useNewsLists";
+import { useCallback, useState } from "react";
+import { NewsFileName } from "../../type/NewsFileName";
+import { NewsFileNameSouce } from "../../type/NewsFileNameSouce";
+
+type Props = {
+    newsId: number;
+};
 
 export const useNewsFileNameGet = () => {
 
-    const { setNewsLists } = useNewsLists();
+    const [newsFileNames, setNewsFileNames] = useState<Array<NewsFileName>>([]);
 
-    const newsFileNameGet = useCallback(() => {
-        axios.get('/api/news/file/view').then(() => {
+    const newsFileNameGet = useCallback((props: Props) => {
 
-        }).catch(() => {
+        const { newsId } = props;
+        const data = { id: newsId };
 
+        axios.post('/api/news/file/view', data).then((res) => {
+            const newsFileNamesSouce = res.data.newsFileNames;
+            const newsFileNamesInfo: Array<NewsFileName> = newsFileNamesSouce.map((name: NewsFileNameSouce) => (
+                {
+                    newsFileName: name.filename
+                }
+            ));
+            setNewsFileNames(newsFileNamesInfo);
+        }).catch((error) => {
+            console.log(error);
         })
     }, []);
-    return { newsFileNameGet };
+    return { newsFileNameGet, newsFileNames };
 }

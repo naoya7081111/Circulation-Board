@@ -81,7 +81,7 @@ export const View: VFC = memo(() => {
                                                 </>
                                             ) : (
                                                 <>
-                                                    <Image src={`https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/newsfile/${newsFileNames[0].newsFileName}`} h='100%'/>                                                
+                                                    <Image src={`https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/newsfile/${newsFileNames[0].newsFileName}`} h='100%' shadow='sm'/>                                                
                                                 </>
                                             )
                                         }

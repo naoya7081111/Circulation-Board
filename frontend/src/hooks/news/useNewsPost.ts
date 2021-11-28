@@ -9,6 +9,7 @@ type Props = {
     title: string;
     content: string;
     isImportant: boolean;
+    newsFile: File | null;
 };
 
 export const useNewsPost = () => {
@@ -21,15 +22,20 @@ export const useNewsPost = () => {
 
     const newsPost = useCallback((props: Props) => {
 
-        const { title, content, isImportant } = props;
-        const data = {
-            title: title,
-            content: content,
-            important: isImportant
-        };
+        const { title, content, isImportant, newsFile } = props;
+        const data = new FormData();
+        data.append('title', title);
+        data.append('content', content);
+        data.append('important', isImportant.toString());
+        if (newsFile !== null){data.append('file', newsFile)};
+        const header = { 
+            headers: {
+            "content-type": "multipart/form-data"
+            }
+        }
         setLoading(true);
 
-        axios.post('/api/news/post', data).then((res) => {
+        axios.post('/api/news/post', data, header).then((res) => {
             if (!res.data.success) {
                 showMessage({title: res.data.message, status: 'error'});
             } else {

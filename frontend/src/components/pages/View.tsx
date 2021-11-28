@@ -93,7 +93,7 @@ export const View: VFC = memo(() => {
                         {hostCheck() ? (
                         <Flex justifyContent='flex-end' w='100%' p={{base: 4, me: 8}}>
                             <Spacer />
-                            <LoginButton onClick={onClickNever} >未読者一覧</LoginButton>
+                            <LoginButton onClick={onClickNever} mt={{base: 3, md: 6}}>未読者一覧</LoginButton>
                             <NeverModal isOpen={isOpen} onClose={onClose} neverMembers={neverMembers} />
                         </Flex>
                         ) : null}

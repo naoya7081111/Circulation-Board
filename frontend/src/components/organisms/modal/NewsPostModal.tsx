@@ -1,4 +1,4 @@
-import { Image, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Spacer, Stack, Switch, Textarea, Text, Box } from "@chakra-ui/react";
+import { Image, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Spacer, Stack, Switch, Textarea, Text } from "@chakra-ui/react";
 import { AttachmentIcon } from "@chakra-ui/icons";
 import { ChangeEvent, memo, useState, VFC } from "react";
 import { useNewsPost } from "../../../hooks/news/useNewsPost";
@@ -38,10 +38,9 @@ export const NewsPostModal: VFC<Props> = memo((props) => {
             console.error(err)
         }
     };
-    console.log(newsFile);
 
     const onClickPost = () => {
-        newsPost({title, content, isImportant});
+        newsPost({title, content, isImportant, newsFile});
         onClose();
         setIsImportant(false)
     }

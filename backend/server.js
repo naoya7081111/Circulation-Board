@@ -863,11 +863,11 @@ app.post('/api/news/file/view',
     }
 )
 
-app.post('/api/news/post', 
+// 更新
+app.post('/api/news/post', upload, 
     (req, res, next) => {
         const title = req.body.title;
         const content = req.body.content;
-
         const errors = [];
         if(title === '') {
             errors.push('titleが空です');
@@ -886,16 +886,17 @@ app.post('/api/news/post',
     },
     (req, res) => {
         const title = req.body.title;
-        const important = req.body.important;
         const content = req.body.content;
+        const importantString = req.body.important;
+        const important = importantString === 'true';
         const dt = new Date();
         const formatted = dt.toFormat('YYYY-MM-DD');
         connection.query(
             'INSERT INTO news (title, communityid, userid, postdate, important, content) VALUES (?, ?, ?, ?, ?, ?)',
             [title, req.communityId, req.userId, formatted, important, content],
             (error, results) => {
-                // 既読機能に関する
                 const newsId = results.insertId;
+                // 既読機能に関する
                 connection.query(
                     "SELECT userid FROM members WHERE communityid = ?",
                     [req.communityId],
@@ -922,11 +923,54 @@ app.post('/api/news/post',
                             }
                         )
                     }
-                )
+                );
+
+                // ファイル投稿に関する
+                uploadAsync(req, res).then (() => {
+                    const file =req.file;
+                    const imageName = file.filename;
+
+                    // オブジェクトストレージへアップロード
+                    // tokenの取得
+                    httpRequest.post(params, function(err, result, body){
+                        if(_.isString(body)){
+                            const res = JSON.parse(body);
+                            const token = res.access.token.id;
+                            // const token_expire = res.access.token.expires;
+        
+                            const headers = {
+                                'X-Auth-Token': token,
+                                "Transfer-Encoding":"chunked"
+                            };
+        
+                            // アップロード
+                            const options = {
+                                url: `https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/newsfile/${imageName}`,
+                                headers: headers,
+                            }
+        
+                            fs.createReadStream(`public/temporary/${imageName}`)
+                            .pipe(httpRequest.put( options , function(err , response , body){
+                            if(err)console.log(err);
+                            else {
+                                connection.query(
+                                    'INSERT INTO newsfile (filename, newsid) VALUES (?, ?)',
+                                    [imageName, newsId],
+                                )
+                            }
+                            }));        
+                        } else{
+                            const res = body;
+                            console.log(res);
+                        }
+                    });    
+                })
+
             }
         )
     }
-)
+);
+
 
 app.post('/api/complete', 
     (req, res) => {
@@ -965,7 +1009,7 @@ app.post('/api/complete/never',
             }
         )
     }
-)
+);
 
 // expressとreactについて
 // https://reffect.co.jp/react/front-react-back-node#i

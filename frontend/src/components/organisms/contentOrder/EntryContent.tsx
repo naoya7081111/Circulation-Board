@@ -57,7 +57,7 @@ export const EntryContent: VFC = memo(() => {
     }
 
     return (
-        <Stack spacing={6} mx={4} >
+        <Stack spacing={6} >
             {!isResult ? (
                 <>
                     <Input  placeholder="コミュニティIDを入力してください" onChange={onChangeName} type="number" />
@@ -67,7 +67,7 @@ export const EntryContent: VFC = memo(() => {
                     <Link onClick={onClickEstablish} textAlign="center" fontSize='md' color="teal.400" >コミュニティを作成</Link>
                     <Box h="256px" overflow="auto" alignItems="center">
                         {loginUser && communityLists.map((c) => (
-                            <ListBelongCard  key={c.communityId} width={{base: "380px", md: "420px"}} value={c.communityId} buttonName='参加' image={c.communityImageName ?? null} onClickButton={onClickSelectEnter} >
+                            <ListBelongCard  key={c.communityId} width={{base: "280px", sm:"360px", md: "480px"}} value={c.communityId} buttonName='参加' image={c.communityImageName ?? null} onClickButton={onClickSelectEnter} >
                                 {c.communityName}
                             </ListBelongCard>
                         ))}

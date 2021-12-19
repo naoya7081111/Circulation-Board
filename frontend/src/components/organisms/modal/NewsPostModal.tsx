@@ -1,10 +1,12 @@
 import { Image, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Spacer, Stack, Switch, Textarea, Text } from "@chakra-ui/react";
 import { AttachmentIcon } from "@chakra-ui/icons";
 import { ChangeEvent, memo, useState, VFC } from "react";
+import Iframe from 'react-iframe';
 import { useNewsPost } from "../../../hooks/news/useNewsPost";
 import { useHostGet } from "../../../hooks/useHostGet";
 import { PostButton } from "../../atoms/button/PostButton";
 import { useResizeFile } from "../../../hooks/useResizeFile";
+import { TextButton } from "../../atoms/button/TextButton";
 
 type Props = {
     isOpen: boolean;
@@ -24,15 +26,33 @@ export const NewsPostModal: VFC<Props> = memo((props) => {
     const [isImportant, setIsImportant] = useState(false);
     const [newsFile, setNewsFile] = useState<File | null>(null)
     const [newsFileLook, setNewsFileLook] = useState<string | null>(null);
+    const [newsPdfFileLook, setNewsPdfFileLook] = useState<any>(null);
 
     const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
     const onChangeContent = (e: ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
     const onChangeImportant = () => setIsImportant(!isImportant);
+
+    const onClickReset = () => {
+        setNewsFile(null);
+        setNewsFileLook(null);
+        setNewsPdfFileLook(null);
+    }
+
     const onChangeNewsFile = async (e: any) => {
+        onClickReset();
         try {
-            const file = e.target.files[0]
-            const proccessFile = await resizeFile({ file: file });
-            setNewsFileLook(proccessFile);
+            const file = e.target.files[0];
+            const extension = file.name.split('.').pop();
+            if (extension === 'pdf'){
+                const fileReader = new FileReader();
+                fileReader.readAsDataURL(file);
+                fileReader.onload = () => {
+                    setNewsPdfFileLook(fileReader.result);
+                }
+            } else {
+                const proccessFile = await resizeFile({ file: file });
+                setNewsFileLook(proccessFile);
+            }
             setNewsFile(file);
         } catch (err) {
             console.error(err)
@@ -68,6 +88,13 @@ export const NewsPostModal: VFC<Props> = memo((props) => {
                             {newsFileLook !== null && (
                                 <>
                                     <Image w='100%' src={newsFileLook === null ? undefined : newsFileLook} alt={title} />
+                                    <TextButton buttonName='消去' onClick={onClickReset}/>
+                                </>
+                            )}
+                            {newsPdfFileLook !== null && (
+                                <>
+                                    <Iframe url={newsPdfFileLook} width='100%' />
+                                    <TextButton buttonName='消去' onClick={onClickReset}/>
                                 </>
                             )}
                         </FormControl>

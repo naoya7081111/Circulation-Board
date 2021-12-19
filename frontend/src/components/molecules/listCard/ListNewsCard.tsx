@@ -14,7 +14,7 @@ export const ListNewsCard: VFC<Props> = memo((props)=> {
     
     return (
         <>
-            <Flex w={{base: "360px", md: "640px"}} h="72px" p={2} alignItems="center" borderRadius={10} bg="orange.50" _hover={{ cursor: "pointer", bg: "orange.100"}} > 
+            <Flex w={{base: "280px", sm:"360px", md: "640px"}} h="72px" p={2} alignItems="center" borderRadius={10} bg="orange.50" _hover={{ cursor: "pointer", bg: "orange.100"}} > 
                 <Badge colorScheme={isComplete ? 'teal' : 'red'}>
                     {isComplete ? '既読' : '未読'}
                 </Badge>

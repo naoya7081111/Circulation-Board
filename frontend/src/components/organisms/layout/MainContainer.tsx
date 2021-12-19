@@ -12,9 +12,11 @@ export const MainContainer: VFC<Props> = memo((props) => {
 
     return (
         <>
-            <Flex w={{base: "480px", md:"720px"}} minHeight="720px" mx="auto" direction="column" bg="transparent">
+            <Flex w={{base: "320px", sm: "480px", md: "720px"}} minHeight="720px" mx="auto" direction="column" bg="transparent">
                 {children}
             </Flex>
         </>
     )
 })
+
+// w={{base: "480px", md:"720px"}}

@@ -77,7 +77,7 @@ export const View: VFC = memo(() => {
                                         {
                                             newsFileNames[0].newsFileName.split('.').pop() === 'pdf' ? (
                                                 <>
-                                                    <Iframe url={`${process.env.PUBLIC_URL}/test/職務経歴書.pdf`} display='block' id='newsfile' allowFullScreen/>                                                
+                                                    <Iframe url={`https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/newsfile/${newsFileNames[0].newsFileName}`} display='block' id='newsfile' allowFullScreen/>                                                
                                                 </>
                                             ) : (
                                                 <>

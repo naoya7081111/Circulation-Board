@@ -14,9 +14,9 @@ export const MenuDrawer: VFC<Props> = memo((props) => {
 
     return (
         <Drawer placement="left" size="xs" onClose={onClose} isOpen={isOpen}>
-            <DrawerOverlay>
+            <DrawerOverlay >
                 <DrawerContent>
-                    <DrawerBody bg="orange.50" >
+                    <DrawerBody bg="orange.50">
                         <SideContent />
                     </DrawerBody>
                 </DrawerContent>

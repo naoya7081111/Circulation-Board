@@ -40,17 +40,17 @@ export const Establish: VFC = memo(() => {
 
     return (
         <Flex align="center" justify="center"  height="100vh">
-            <Box bg="white" w="lg" p={4} borderRadius="lg" boxShadow="md">
+            <Box bg="white" w={{base: "xs", md: "sm"}} p={4} borderRadius="lg" boxShadow="md">
                 <Heading as="h1"  size="lg" textAlign="center">
                     コミュニティ作成
                 </Heading>
                 <Divider my={4}/>
-                <Stack spacing={10} mx={4} >
-                    <Input  placeholder="コミュニティ名を入力してください" onChange={onChangeName} onKeyPress={(e) => onClickEnter(e)}/>
+                <Stack spacing={{base: 6, sm: 10}} mx={4} >
+                    <Input  placeholder="コミュニティ名を入力してください" fontSize={{base: 12, md: 14}} onChange={onChangeName} onKeyPress={(e) => onClickEnter(e)}/>
                     {addPassword && (
                         <>
-                            <Input  placeholder="パスワードを入力してください" type="password" onChange={onChangePassword} onKeyPress={(e) => onClickEnter(e)}/>
-                            <Input  placeholder="もう一度パスワードを入力してください" type="password" onChange={onChangePassword2} onKeyPress={(e) => onClickEnter(e)}/>
+                            <Input  placeholder="パスワードを入力してください" type="password" fontSize={{base: 12, md: 14}} onChange={onChangePassword} onKeyPress={(e) => onClickEnter(e)}/>
+                            <Input  placeholder="もう一度パスワードを入力してください" type="password" fontSize={{base: 12, md: 14}} onChange={onChangePassword2} onKeyPress={(e) => onClickEnter(e)}/>
                         </>
                     )}
                     <FormControl display="flex" alignItems="center">

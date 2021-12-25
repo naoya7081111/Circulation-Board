@@ -21,7 +21,7 @@ export const MemberInfoModal: VFC<Props> = memo((props) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} autoFocus={false} size='sm' motionPreset="slideInBottom">
             <ModalOverlay />
-                <ModalContent bg='orange.50'>
+                <ModalContent bg='orange.50'　marginX={4}>
                     <ModalHeader color='gray.500'>メンバー情報</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>

@@ -62,12 +62,12 @@ export const View: VFC = memo(() => {
                 {
                 selectNews !== null && (
                     <>
-                        <Flex direction='column' w='100%' px={{base: 8, md: 16}}>
-                            <Flex alignItems='center' w={{base: "360px", md: "560px"}} >
+                        <Flex direction='column' w='100%' px={{base: 4, sm: 8, md: 16}}>
+                            <Flex alignItems='center' w={{base: "280px", sm: "360px", md: "560px"}} >
                                 <ListMembersCard id={selectNews!.uesrId} isHost={false} image={selectNews.newsUserImageName} >{selectNews?.newsUserName}</ListMembersCard>
                             </Flex>
                             <Text as="h1" fontSize="xs" ml='56px' color='gray.600'>{dateKanji({date: selectNews?.postDate ?? null})}</Text>
-                            <Text mt={{base: 3, md: 6}} ml='56px' whiteSpace='pre-wrap'　>
+                            <Text mt={{base: 3, md: 6}} ml='56px' whiteSpace='pre-wrap' fontSize={{base: "sm", sm: "md"}}　>
                                 {selectNews?.newsContent}
                             </Text>
                             {/* ファイルの挿入 */}

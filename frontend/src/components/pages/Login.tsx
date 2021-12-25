@@ -35,7 +35,7 @@ export const Login: VFC = memo(() => {
 
     return (
         <Flex align="center" justify="center"  height="100vh">
-            <Box bg="white" w="sm" p={4} borderRadius="md" boxShadow="md">
+            <Box bg="white" w={{base: "xs", md: "sm"}} p={4} borderRadius="md" boxShadow="md">
                 <Heading as="h1"  size="lg" textAlign="center">
                     SEAZECH
                 </Heading>

@@ -14,9 +14,9 @@ export const NeverModal: VFC<Props> = memo((props) => {
     const { isOpen, onClose, neverMembers } = props
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} autoFocus={false} size='sm' motionPreset="slideInBottom">
+        <Modal isOpen={isOpen} onClose={onClose} autoFocus={false} size='xs' motionPreset="slideInBottom">
             <ModalOverlay />
-                <ModalContent bg='orange.50' >
+                <ModalContent bg='orange.50' marginX={4}>
                     <ModalHeader color='gray.500'>未読者一覧</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>

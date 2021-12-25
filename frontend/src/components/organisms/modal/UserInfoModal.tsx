@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, FormControl, FormLabel, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spacer, Stack, Text } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spacer, Stack, Text, Box } from "@chakra-ui/react";
 import { ChangeEvent, memo, useCallback, useEffect, useState, VFC } from "react";
 import { useLoginUser } from "../../../hooks/context/useLoginUser";
 import { LogoutButton } from "../../atoms/button/LogoutButton";
@@ -76,7 +76,7 @@ export const UserInfoModal: VFC<Props> = memo((props) => {
     return (
         <Modal isOpen={isOpen} onClose={onCloseSet} autoFocus={false} size='sm' motionPreset="slideInBottom">
             <ModalOverlay />
-                <ModalContent bg='orange.50' padding={4}>
+                <ModalContent bg='orange.50' padding={4}　marginX={4}>
                     <ModalHeader color='gray.500'>ユーザー情報</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
@@ -87,12 +87,17 @@ export const UserInfoModal: VFC<Props> = memo((props) => {
                                 <Image borderRadius="full" boxSize="42px" src={imageName === null ? `${process.env.PUBLIC_URL}/img/freemeison.jpeg` : `https://object-storage.tyo2.conoha.io/v1/nc_819897bd08504d38bcce5fc9b4d08a6f/test/${imageName}`} />
                                 <Spacer />
                                 <SettingButton onClick={onClickSetting} >変更</SettingButton>
-                                </HStack>
-                                <Text fontSize="md" fontWeight="bold" >
-                                    {loginUser?.userName}
-                                </Text>
-                                <Text fontSize="sm" >
-                                    {loginUser?.userEmail}
+                                </HStack>   
+                                <Box>
+                                    <Text fontSize="md" fontWeight="bold" >
+                                        {loginUser?.userName}
+                                    </Text>
+                                    <Text fontSize="xs" color='gray.500'>
+                                        {loginUser?.userEmail}
+                                    </Text>
+                                </Box>                                 
+                                <Text fontSize="sm">
+                                    自己紹介文を記載します。
                                 </Text>
                                 <Spacer />                                
                                 </>

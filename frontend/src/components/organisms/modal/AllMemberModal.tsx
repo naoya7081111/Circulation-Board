@@ -21,7 +21,7 @@ export const AllMemberModal: VFC<Props> = memo((props) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} autoFocus={false} size='sm' motionPreset="slideInBottom">
             <ModalOverlay />
-                <ModalContent bg='orange.50'>
+                <ModalContent bg='orange.50'　marginX={4}>
                     <ModalHeader color='gray.500'>コミュニティメンバー</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>

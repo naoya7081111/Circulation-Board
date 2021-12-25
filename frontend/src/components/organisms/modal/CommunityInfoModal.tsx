@@ -73,7 +73,7 @@ export const CommunityInfoModal: VFC<Props> = memo((props) => {
     return (
         <Modal isOpen={isOpen} onClose={onCloseSet} autoFocus={false} size='sm' motionPreset="slideInBottom">
             <ModalOverlay />
-                <ModalContent bg='orange.50' padding={4}>
+                <ModalContent bg='orange.50' padding={4}　marginX={4}>
                     <ModalHeader color='gray.500'>コミュニティ情報</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>

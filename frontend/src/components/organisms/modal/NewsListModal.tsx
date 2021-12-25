@@ -21,7 +21,7 @@ export const NewsListModal: VFC<Props> = memo((props) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} autoFocus={false} motionPreset="slideInBottom">
             <ModalOverlay />
-                <ModalContent bg='orange.50' w='1000px'>
+                <ModalContent bg='orange.50' w='1000px' marginX={4}>
                     <ModalHeader color='gray.500'>ニュース一覧</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>

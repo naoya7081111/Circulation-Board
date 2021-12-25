@@ -37,7 +37,7 @@ export const SideContent: VFC = memo(() => {
             ) : (
                 <>
                 <SideBarText>参加コミュニティ</SideBarText>    
-                <ListCommunityCard width={'280px'} image={loginCommunity?.communityImageName ?? null} >{loginCommunity?.communityName} </ListCommunityCard>
+                <ListCommunityCard width="280px" image={loginCommunity?.communityImageName ?? null} >{loginCommunity?.communityName} </ListCommunityCard>
                 <Divider  my={4} borderWidth="lg" borderColor="gray.500" />
                 <SideBarTextAndButton onClick={onclickAllMember} buttonName={"すべてを表示"} >参加メンバー</SideBarTextAndButton>
                 <Box h="360px" overflow="auto" >

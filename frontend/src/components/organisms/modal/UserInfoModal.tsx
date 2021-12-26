@@ -1,13 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, FormControl, FormLabel, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spacer, Stack, Text, Box } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spacer, Stack, Text, Box, Textarea } from "@chakra-ui/react";
+import { AttachmentIcon } from "@chakra-ui/icons"
 import { ChangeEvent, memo, useCallback, useEffect, useState, VFC } from "react";
 import { useLoginUser } from "../../../hooks/context/useLoginUser";
 import { LogoutButton } from "../../atoms/button/LogoutButton";
 import { SettingButton } from "../../atoms/button/SettingButton";
-import { AttachmentIcon } from "@chakra-ui/icons";
 import { useUpdateUser } from "../../../hooks/auth/useUpdateUser";
 import { useResizeFile } from "../../../hooks/useResizeFile";
 import { useUpdateUserImage } from "../../../hooks/auth/useUpdateUserImage";
+import { EmailText } from "../../atoms/text/EmailText";
+import { AreaText } from "../../atoms/text/AreaText";
+import { SiteText } from "../../atoms/text/SiteText";
 
 type Props = {
     isOpen: boolean;
@@ -27,14 +30,20 @@ export const UserInfoModal: VFC<Props> = memo((props) => {
     const [imageName, setImageName] = useState<string | null>(null);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [sentence, setSentence] = useState('');
+    const [area, setArea] = useState('');
+    const [site, setSite] = useState('');
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imageFileLook, setImageFileLook] = useState<string | null>(null);
-    const [ isSetting, setIsSetting ] = useState(false);
+    const [isSetting, setIsSetting] = useState(false);
 
     useEffect(() => {
         setImageName(loginUser?.userImageName ?? null)
         setName(loginUser?.userName ?? '')
         setEmail(loginUser?.userEmail ?? '')
+        setSentence(loginUser?.userSentence ?? '')
+        setArea(loginUser?.userArea ?? '')
+        setSite(loginUser?.userSite ?? '')
     }, [loginUser])
 
     const onClickSetting = () => {
@@ -47,12 +56,12 @@ export const UserInfoModal: VFC<Props> = memo((props) => {
     }
 
     const onClickUp = useCallback(() => {
-        updateUser({ name, email });
+        updateUser({ name, email, sentence, area, site });
         if(imageFile){
             updateUserImage({ imageFile });
         }
         setIsSetting(false);
-    }, [name, email, imageFile, updateUser]);
+    }, [name, email, sentence, area, site, imageFile, updateUser]);
 
    const onClickBack = () => {
        setIsSetting(false);
@@ -71,6 +80,9 @@ export const UserInfoModal: VFC<Props> = memo((props) => {
  
     const onChangeName = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value);
     const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
+    const onChangeSentence = (e: ChangeEvent<HTMLTextAreaElement>) => setSentence(e.target.value);
+    const onChangeArea = (e: ChangeEvent<HTMLInputElement>) => setArea(e.target.value);
+    const onChangeSite = (e: ChangeEvent<HTMLInputElement>) => setSite(e.target.value);
 
 
     return (
@@ -92,13 +104,27 @@ export const UserInfoModal: VFC<Props> = memo((props) => {
                                     <Text fontSize="md" fontWeight="bold" >
                                         {loginUser?.userName}
                                     </Text>
-                                    <Text fontSize="xs" color='gray.500'>
-                                        {loginUser?.userEmail}
-                                    </Text>
-                                </Box>                                 
-                                <Text fontSize="sm">
-                                    自己紹介文を記載します。
-                                </Text>
+                                    <EmailText fontSize="xs" color='gray.500' boxSize='3'>{loginUser?.userEmail}</EmailText>
+                                </Box>
+                                {loginUser?.userSentence !== null && (
+                                    <>
+                                    <Text fontSize="sm" whiteSpace='pre-wrap'>
+                                        {loginUser?.userSentence}
+                                    </Text>                                        
+                                    </>
+                                )} 
+                                <Box>
+                                    {loginUser?.userArea !== null && (
+                                        <>
+                                        <AreaText fontSize="xs" color='gray.500' boxSize='3' >{loginUser?.userArea}</AreaText>
+                                        </>
+                                    )}
+                                    {loginUser?.userSite !== null && (
+                                        <>
+                                        <SiteText fontSize="xs" color='gray.500' boxSize='3' >{loginUser?.userSite}</SiteText>
+                                        </>
+                                    )}
+                                </Box>
                                 <Spacer />                                
                                 </>
                             ) : (
@@ -129,7 +155,20 @@ export const UserInfoModal: VFC<Props> = memo((props) => {
                                 <FormControl>
                                     <FormLabel>メールアドレス</FormLabel>
                                     <Input value={email} onChange={onChangeEmail} />
-                                </FormControl>                                
+                                </FormControl>      
+                                <FormControl>
+                                    <FormLabel>紹介文</FormLabel>
+                                    <Textarea value={sentence} onChange={onChangeSentence} fontSize="xs" />
+                                </FormControl>      
+                                <FormControl>
+                                    <FormLabel>地域</FormLabel>
+                                    <Input value={area} onChange={onChangeArea} />
+                                </FormControl>      
+                                <FormControl>
+                                    <FormLabel>Webサイト</FormLabel>
+                                    <Input value={site} onChange={onChangeSite} />
+                                </FormControl>      
+
                                 </>
                             )
                             }

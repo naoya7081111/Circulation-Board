@@ -33,7 +33,10 @@ export const useEntrySearch = () => {
                     communityId: communityInfos.id,
                     communityName: communityInfos.communityname,
                     communityCreatedDate: communityInfos.createddate,
-                    communityImageName: communityInfos.imagename               
+                    communityImageName: communityInfos.imagename,
+                    communitySentence: communityInfos.sentence,
+                    communityArea: communityInfos.area,
+                    communitySite: communityInfos.site             
                 };
                 communityInfos.password === null ? setIsPassword(false) : setIsPassword(true);
                 setResultCommunity(communityInfo);

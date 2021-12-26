@@ -29,12 +29,18 @@ export const useDecodeJwt = () => {
             const userName: string = decoded.user[0].username;
             const userEmail: string = decoded.user[0].email;
             const userImageName: string = decoded.user[0].imagename;
+            const userSentence: string = decoded.user[0].sentence;
+            const userArea: string = decoded.user[0].area;
+            const userSite: string = decoded.user[0].site;
 
             return {
                 userId: userId,
                 userName: userName,
                 userEmail: userEmail,
-                userImageName: userImageName
+                userImageName: userImageName,
+                userSentence: userSentence,
+                userArea: userArea,
+                userSite: userSite
             }    
         }
 

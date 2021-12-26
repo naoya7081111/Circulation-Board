@@ -27,12 +27,18 @@ export const useDecodeCommunityJwt = () => {
             const communityName: string = decoded.community[0].communityname;
             const communityCreatedDate: Date = decoded.community[0].createddate;
             const communityImageName: string | null = decoded.community[0].imagename;
-    
+            const communitySentence: string | null = decoded.community[0].sentence;
+            const communityArea: string | null = decoded.community[0].area;
+            const communitySite: string | null = decoded.community[0].site;
+
             return {
                 communityId: communityId,
                 communityName: communityName,
                 communityCreatedDate: communityCreatedDate,
-                communityImageName: communityImageName
+                communityImageName: communityImageName,
+                communitySentence: communitySentence,
+                communityArea: communityArea,
+                communitySite: communitySite
             }                
         }
 

@@ -8,6 +8,9 @@ import { useMessage } from "../useMessage"
 type Props = {
     name: string;
     email: string;
+    sentence: string;
+    area: string;
+    site: string;
 }
 
 export const useUpdateUser = () => {
@@ -18,10 +21,13 @@ export const useUpdateUser = () => {
 
     const updateUser = useCallback((props: Props) => {
 
-        const { name, email } = props;
+        const { name, email, sentence, area, site } = props;
         const data = new FormData();
         data.append('name', name);
         data.append('email', email);
+        data.append('sentence', sentence);
+        data.append('area', area);
+        data.append('site', site);
 
         axios.post('/api/update/user', data).then((res) => {
             if(!res.data.success){

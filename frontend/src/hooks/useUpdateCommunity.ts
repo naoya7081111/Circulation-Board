@@ -7,6 +7,9 @@ import { useMessage } from "./useMessage";
 
 type Props = {
     name: string;
+    sentence: string;
+    area: string;
+    site: string;
 }
 
 export const useUpdateCommunity = () => {
@@ -17,9 +20,12 @@ export const useUpdateCommunity = () => {
 
     const updateCommunity = useCallback((props: Props) => {
 
-        const { name } = props;
+        const { name, sentence, area, site } = props;
         const data = new FormData();
         data.append('name', name);
+        data.append('sentence', sentence);
+        data.append('area', area);
+        data.append('site', site);
 
         axios.post('/api/update/community', data).then((res) => {
             if(!res.data.success){

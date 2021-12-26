@@ -1,5 +1,5 @@
 import { AttachmentIcon } from "@chakra-ui/icons";
-import { Button, FormControl, FormLabel, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Spacer, Stack, Text } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Spacer, Stack, Text, Box, Textarea } from "@chakra-ui/react";
 import { ChangeEvent, memo, useCallback, useEffect, useState, VFC } from "react";
 import { useLoginCommunity } from "../../../hooks/context/useLoginCommunity";
 import { useDate } from "../../../hooks/useDate";
@@ -8,6 +8,9 @@ import { useResizeFile } from "../../../hooks/useResizeFile";
 import { useUpdateCommunity } from "../../../hooks/useUpdateCommunity";
 import { useUpdateCommunityImage } from "../../../hooks/useUpdateCommunityImage";
 import { SettingButton } from "../../atoms/button/SettingButton";
+import { DateText } from "../../atoms/text/DateText";
+import { AreaText } from "../../atoms/text/AreaText";
+import { SiteText } from "../../atoms/text/SiteText";
 
 type Props = {
     isOpen: boolean;
@@ -26,6 +29,9 @@ export const CommunityInfoModal: VFC<Props> = memo((props) => {
     const { hostCheck } = useHostGet();
 
     const [name, setName] = useState('');
+    const [sentence, setSentence] = useState('');
+    const [area, setArea] = useState('');
+    const [site, setSite] = useState('');
     const [imageName, setImageName] = useState<string | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imageFileLook, setImageFileLook] = useState<string | null>(null);
@@ -34,6 +40,9 @@ export const CommunityInfoModal: VFC<Props> = memo((props) => {
     useEffect(() => {
         setImageName(loginCommunity?.communityImageName ?? null)
         setName(loginCommunity?.communityName ?? '')
+        setSentence(loginCommunity?.communitySentence ?? '')
+        setArea(loginCommunity?.communityArea ?? '')
+        setSite(loginCommunity?.communitySite ?? '')
     }, [loginCommunity])
 
     const onClickSetting = () => {
@@ -50,12 +59,12 @@ export const CommunityInfoModal: VFC<Props> = memo((props) => {
     }
 
     const onClickUp = useCallback(() => {
-        updateCommunity({ name });
+        updateCommunity({ name, sentence, area, site });
         if(imageFile){
             updateCommunityImage({ imageFile });
         }
         setIsSetting(false);
-    }, [updateCommunity, updateCommunityImage, name, imageFile, setIsSetting])
+    }, [updateCommunity, updateCommunityImage, name, sentence, area, site, imageFile, setIsSetting])
 
     const onChangeImage = async (e: any) => {
         try {
@@ -69,6 +78,9 @@ export const CommunityInfoModal: VFC<Props> = memo((props) => {
       }
 
     const onChangeName = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value);
+    const onChangeSentence = (e: ChangeEvent<HTMLTextAreaElement>) => setSentence(e.target.value);
+    const onChangeArea = (e: ChangeEvent<HTMLInputElement>) => setArea(e.target.value);
+    const onChangeSite = (e: ChangeEvent<HTMLInputElement>) => setSite(e.target.value);
 
     return (
         <Modal isOpen={isOpen} onClose={onCloseSet} autoFocus={false} size='sm' motionPreset="slideInBottom">
@@ -89,15 +101,32 @@ export const CommunityInfoModal: VFC<Props> = memo((props) => {
                                     </>
                                 )}
                                 </HStack>
-                                <Text fontSize='sm'>
-                                    {dateKanji({ date: loginCommunity?.communityCreatedDate ?? null })}
-                                </Text>
-                                <Text fontSize="md" fontWeight="bold" >
-                                    {loginCommunity?.communityName}
-                                </Text>
-                                <Text fontSize='sm'>
+                                <Box>
+                                    <Text fontSize="md" fontWeight="bold" >
+                                        {loginCommunity?.communityName}
+                                    </Text>
+                                    <Text fontSize='xs' color='gray.500'>
                                     {`コミュニティID:${loginCommunity?.communityId}`}
-                                </Text>
+                                    </Text>                                        
+                                </Box>
+                                {loginCommunity?.communitySentence !== null && (
+                                    <>
+                                    <Text fontSize="sm" whiteSpace='pre-wrap'>{loginCommunity?.communitySentence}</Text> 
+                                    </>
+                                )}
+                                <Box>
+                                    <DateText fontSize="xs" color='gray.500' boxSize='3'>{dateKanji({ date: loginCommunity?.communityCreatedDate ?? null })}</DateText>
+                                    {loginCommunity?.communityArea !== null && (
+                                        <>
+                                        <AreaText fontSize="xs" color='gray.500' boxSize='3'>{loginCommunity?.communityArea}</AreaText>                                        
+                                        </>
+                                    )}
+                                    {loginCommunity?.communitySite !== null && (
+                                        <>
+                                        <SiteText fontSize="xs" color='gray.500' boxSize='3'>{loginCommunity?.communitySite}</SiteText>                                        
+                                        </>
+                                    )}
+                                </Box>
                                 <Spacer />                                
                                 </>
                             ) : (
@@ -125,6 +154,19 @@ export const CommunityInfoModal: VFC<Props> = memo((props) => {
                                         <FormLabel>コミュニティ名</FormLabel>
                                         <Input value={name} onChange={onChangeName} />
                                     </FormControl>
+                                    <FormControl>
+                                        <FormLabel>コミュニティ紹介文</FormLabel>
+                                        <Textarea value={sentence} onChange={onChangeSentence} fontSize="xs" />
+                                    </FormControl>
+                                    <FormControl>
+                                        <FormLabel>地域</FormLabel>
+                                        <Input value={area} onChange={onChangeArea} />
+                                    </FormControl>
+                                    <FormControl>
+                                        <FormLabel>Webサイト</FormLabel>
+                                        <Input value={site} onChange={onChangeSite} />
+                                    </FormControl>
+
                                 </>
                             )}
                         </Stack>

@@ -19,8 +19,8 @@ export const LoginUserProvider = (props: Props) => {
 
     const defalutUser = () => {
         const cookiesArray = document.cookie.split(';');
-        const  community_cookies = cookiesArray.find(value => value.match(/access_token=/g));
-        if(community_cookies !== undefined){
+        const  user_cookies = cookiesArray.find(value => value.match(/access_token=/g));
+        if(user_cookies !== undefined){
             const cookies = document.cookie;
             const decoded = decodeJwt({ cookies });
             if(decoded){

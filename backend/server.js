@@ -101,6 +101,7 @@ const option = {
 app.post('/api/login', (req, res) => {
     const email = req.body.email;
     connection.query(
+        // 'SELECT * FROM users WHERE email = ?',
         'SELECT * FROM users WHERE email = ?',
         [email],
         (error, results) => {
@@ -264,10 +265,13 @@ app.post('/api/update/user', upload,
     (req, res) => {
         const userName = req.body.name;
         const email = req.body.email;
+        const sentence = req.body.sentence !== '' ? req.body.sentence : null;
+        const area = req.body.area !== '' ? req.body.area : null;
+        const site = req.body.site !== '' ? req.body.site : null;
 
         connection.query(
-            'UPDATE users SET username = ?, email = ? WHERE users.id = ?',
-            [userName, email, req.userId],
+            'UPDATE users SET username = ?, email = ?, sentence = ?, area = ?, site = ? WHERE users.id = ?',
+            [userName, email, sentence, area, site, req.userId],
             (error, results) => {
                 connection.query(
                     'SELECT * FROM users WHERE id = ?',
@@ -695,9 +699,12 @@ app.post('/api/update/community', upload,
     },
     (req, res) => {
         const communityName = req.body.name;
+        const sentence = req.body.sentence !== '' ? req.body.sentence : null;
+        const area = req.body.area !== '' ? req.body.area : null;
+        const site = req.body.site !== '' ? req.body.site : null;
         connection.query(
-            'UPDATE communities SET communityname = ? WHERE communities.id = ?',
-            [communityName, req.communityId],
+            'UPDATE communities SET communityname = ?, sentence = ?, area = ?, site = ? WHERE communities.id = ?',
+            [communityName, sentence, area, site, req.communityId],
             (error, results) => {
                 connection.query(
                     'SELECT * FROM communities WHERE id = ?',

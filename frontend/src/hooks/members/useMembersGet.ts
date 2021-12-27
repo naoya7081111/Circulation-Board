@@ -21,7 +21,10 @@ export const useMembersGet = () => {
                     entryDate: member.entrydate,
                     withDrawalDate: member.withdrawaldate,
                     communityId: member.communityid,
-                    isHost: member.host
+                    isHost: member.host,
+                    sentence: member.sentence,
+                    area: member.area,
+                    site: member.site
                 }
             ))
             setCommunityMembers(membersInfo);

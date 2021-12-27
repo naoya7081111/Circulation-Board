@@ -6,4 +6,7 @@ export type CommunityMembersSource = {
     id: number;
     imagename: string | null;
     username: string;
+    sentence: string | null;
+    area: string | null;
+    site: string | null;
 }

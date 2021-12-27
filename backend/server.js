@@ -812,7 +812,7 @@ app.post('/api/update/communityimage',
 
 app.get('/api/member', (req, res) => {
     connection.query(
-        'SELECT users.id, username, imagename, communityid, entrydate, withdrawaldate, host FROM users INNER JOIN members ON users.id = userid WHERE communityid = ?',
+        'SELECT users.id, username, imagename, communityid, sentence, area, site, entrydate, withdrawaldate, host FROM users INNER JOIN members ON users.id = userid WHERE communityid = ?',
         [req.communityId],
         (error, results) => {
             if (results.length > 0) {

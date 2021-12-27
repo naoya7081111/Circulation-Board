@@ -6,4 +6,7 @@ export type CommunityMember = {
     withdrawalDate: Date | null;
     communityId: number;
     isHost: boolean;
+    sentence: string | null;
+    area: string | null;
+    site: string | null;
 };

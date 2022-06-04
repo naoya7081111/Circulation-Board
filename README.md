@@ -1,5 +1,5 @@
 # 回覧板アプリ
-[https://seazech.com](https://seazech.com)
+[https://www.seazech.com](https://www.seazech.com)
 
 ### 概要
 ホスト(管理者)がコミュニティを作成し、メンバーが参加する構造になっています。
